@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yolculuk Planı</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+    }
+    header {
+  background-color: #6ccbf7;
+  height: 60px; /* sabit yükseklik */
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header-left img {
+      height: 128px;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 70px);
+    }
+    .left-panel {
+      width: 40%;
+      background: #ffffff;
+      padding: 2rem;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    .left-panel h2 {
+      margin-bottom: 1rem;
+      color: #003f6b;
+    }
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-row input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #7cc0f8;
+      color: #003f6b;
+    }
+    button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #6ccbf7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003f6b;
+    }
+    .plan-output {
+      margin-top: 2rem;
+    }
+    .plan-output h3 {
+      margin-bottom: 1rem;
+      color: #003f6b;
+    }
+    .right-panel {
+      flex: 1;
+      position: relative;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+    .map-overlay {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255, 255, 255, 0);
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="images/logo.png" alt="Planlio">
+    
+    </div>
+    <nav class="nav">
+      <a href="https://www.skyscanner.com" target="_blank">Transport</a>
+      <a href="plan.html">Trip Planner</a>
+      <a href="https://www.booking.com" target="_blank">Hotels</a>
+      <a href="https://www.skyscanner.com" target="_blank">Cars</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="left-panel">
+      <h2>Yolculuk Planı</h2>
+      <div class="form-row">
+        <input type="text" id="from" placeholder="Nereden">
+        <input type="text" id="to" placeholder="Nereye">
+      </div>
+      <div class="form-row">
+        <input type="date" id="checkin">
+        <input type="date" id="checkout">
+      </div>
+      <div class="form-row">
+        <input type="number" id="budget" placeholder="Bütçe (₺)">
+        <input type="number" id="adults" placeholder="Yetişkin">
+        <input type="number" id="children" placeholder="Çocuk">
+      </div>
+      <button onclick="generatePlan()">Yeniden Planla</button>
+
+      <div class="plan-output" id="plan-output">
+        <h3>Önerilen Plan</h3>
+        <p id="plan-text">Plan hazırlanıyor...</p>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div id="map"></div>
+      <div class="map-overlay"></div>
+    </div>
+  </div>
+
+  <script>
+    let map;
+    const formFields = ["from", "to", "checkin", "checkout", "budget", "adults", "children"];
+
+    window.onload = () => {
+      formFields.forEach(id => {
+        const val = sessionStorage.getItem(id);
+        if (val) document.getElementById(id).value = val;
+      });
+      initMap();
+      generatePlan();
+
+      document.getElementById("checkin").addEventListener("change", updateCheckoutLimit);
+      initAutocomplete();
+    };
+
+    function updateCheckoutLimit() {
+      const checkin = document.getElementById("checkin").value;
+      if (!checkin) return;
+
+      const minDate = new Date(checkin);
+      const maxDate = new Date(checkin);
+      maxDate.setDate(minDate.getDate() + 6);
+
+      const formatDate = (d) => d.toISOString().split("T")[0];
+      document.getElementById("checkout").min = formatDate(minDate);
+      document.getElementById("checkout").max = formatDate(maxDate);
+    }
+
+    async function generatePlan() {
+      const data = {};
+      formFields.forEach(id => {
+        const val = document.getElementById(id).value;
+        sessionStorage.setItem(id, val);
+        data[id] = val;
+      });
+
+      const start = new Date(data.checkin);
+      const end = new Date(data.checkout);
+      const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+      data.days = diff;
+
+      const planText = document.getElementById("plan-text");
+      planText.textContent = "Plan hazırlanıyor...";
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/generate-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        if (result.plan) {
+          planText.innerHTML = result.plan.replace(/\n/g, "<br>");
+          findPlaces(data.to);
+        } else {
+          planText.textContent = "Plan alınamadı: " + (result.error || "Bilinmeyen hata.");
+        }
+      } catch (error) {
+        planText.textContent = "Plan alınamadı: " + error.message;
+      }
+    }
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 12,
+        center: { lat: 39.0, lng: 35.0 }
+      });
+    }
+
+    function findPlaces(destination) {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: destination }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const loc = results[0].geometry.location;
+          map.setCenter(loc);
+          const request = {
+            location: loc,
+            radius: 10000,
+            keyword: "tourist attractions"
+          };
+          const service = new google.maps.places.PlacesService(map);
+          service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+              results.forEach(place => {
+                if (place.geometry?.location) {
+                  new google.maps.Marker({
+                    map,
+                    position: place.geometry.location,
+                    title: place.name
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+
+    function initAutocomplete() {
+      const options = {
+        types: ["(cities)"],
+        componentRestrictions: { country: "tr" }
+      };
+      new google.maps.places.Autocomplete(document.getElementById("from"), options);
+      new google.maps.places.Autocomplete(document.getElementById("to"), options);
+    }
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARwfRf0orLXfTRwlkwDtXbNeyZVQA5k4o&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hotels</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+    }
+    header {
+      background: linear-gradient(to right, #5e60ce, #7400b8);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    main {
+      padding: 2rem;
+    }
+    h2 {
+      color: #5e60ce;
+      margin-bottom: 1rem;
+    }
+    .info {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Rome2Rio Clone</div>
+    <nav class="nav">
+      <a onclick="navigate('transport')">Transport</a>
+      <a onclick="navigate('plan')">Trip Planner</a>
+      <a onclick="navigate('hotels')">Hotels</a>
+      <a onclick="navigate('cars')">Cars</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Önerilen Oteller</h2>
+    <div class="info">
+      <p><strong>Gidilecek Yer:</strong> <span id="to"></span></p>
+      <p><strong>Gün Sayısı:</strong> <span id="days"></span></p>
+      <p><strong>Bütçe:</strong> <span id="budget"></span> ₺</p>
+      <p>Bu verilere göre uygun oteller listelenecek (simülasyon).</p>
+    </div>
+  </main>
+
+  <script>
+    const formFields = ["to", "days", "budget"];
+
+    window.onload = () => {
+      formFields.forEach(id => {
+        if (sessionStorage.getItem(id)) {
+          document.getElementById(id).textContent = sessionStorage.getItem(id);
+        }
+      });
+    };
+
+    function navigate(page) {
+      location.href = page + ".html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planlio - AI Tatil Planlayıcı</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    header {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 10;
+    }
+    header img {
+      height: 164px;
+    }
+    .banner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      backdrop-filter: brightness(0.7);
+    }
+    .banner-content {
+      display: flex;
+      background-color: rgba(255, 255, 255, 0);
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 1200px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0);
+    }
+    .banner-text {
+      flex: 1;
+      padding-right: 2rem;
+      backdrop-filter: none;
+    }
+    .banner-text h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .banner-text p {
+      font-size: 1.2rem;
+    }
+    .form-box {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.342);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: none;
+      color: #003f6b;
+    }
+    .form-box h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: #003f6b;
+    }
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-row input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #6ccbf7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004f88;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="images/logo.png" alt="Planlio">
+  </header>
+
+  <div class="banner">
+    <div class="banner-content">
+      <div class="banner-text">
+        <h1>Hayalindeki Yolculuk Burada Başlar</h1>
+        <p>Planlio, Kişisel Gezi Planlayıcın</p>
+      </div>
+      <div class="form-box">
+        <h2>Plan Oluşturucu</h2>
+        <div class="form-row">
+          <input type="text" id="from" placeholder="Nereden (örn: İstanbul)">
+          <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
+        </div>
+        <div class="form-row">
+
+         
+          <input type="date" id="checkin" class="date-picker" placeholder="Giriş Tarihi">
+          <input type="date" id="checkout" class="date-picker" placeholder="Çıkış Tarihi">
+
+        </div>
+        <div class="form-row">
+          <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
+        </div>
+        <div class="form-row">
+          <input type="number" id="adults" min="1" placeholder="Yetişkin Sayısı">
+          <input type="number" id="children" min="0" placeholder="Çocuk Sayısı">
+        </div>
+        <button onclick="openPlanPage()">Planla</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPlanPage() {
+      const fields = ["from", "to", "checkin", "checkout", "budget", "adults", "children"];
+      const queryParams = new URLSearchParams();
+      let start = new Date(document.getElementById("checkin").value);
+      let end = new Date(document.getElementById("checkout").value);
+      let diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
+      if (diff > 7) {
+        alert("Tatil süresi maksimum 7 gün olabilir.");
+        return;
+      }
+      fields.forEach(id => {
+        const val = document.getElementById(id).value;
+        sessionStorage.setItem(id, val);
+        queryParams.append(id, val);
+      });
+      sessionStorage.setItem("days", diff.toString());
+      queryParams.append("days", diff.toString());
+      window.open('plan.html?' + queryParams.toString(), '_blank');
+    }
+
+    function initAutocomplete() {
+      const fromInput = document.getElementById('from');
+      const toInput = document.getElementById('to');
+      new google.maps.places.Autocomplete(fromInput, { types: ['(cities)'] });
+      new google.maps.places.Autocomplete(toInput, { types: ['(cities)'] });
+    }
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARwfRf0orLXfTRwlkwDtXbNeyZVQA5k4o&libraries=places&callback=initAutocomplete" async defer></script>
+  <script>
+  document.querySelectorAll('.date-picker').forEach(function(input) {
+    input.addEventListener('click', function () {
+      this.showPicker && this.showPicker();
+    });
+  });
+</script>
+
+</body>
+</html>
