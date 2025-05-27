@@ -3,7 +3,7 @@ from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://planlio.info"])
 
 client = openai.OpenAI(api_key="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")
 
