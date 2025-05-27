@@ -29,13 +29,14 @@ def generate_plan():
     prompt_filled = prompt_filled.replace("{{butce}}", data.get("budget", "1000"))
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4.5-preview",
-            messages=[
-                {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
-                {"role": "user", "content": prompt_filled}
-            ],
-            temperature=0.75
+    response = client.chat.completions.create(
+        model="gpt-4.5-preview",
+        messages=[
+            {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
+            {"role": "user", "content": prompt_filled}
+        ],
+        temperature=0.75
+    )
         )
         result = response.choices[0].message.content
         return jsonify({"plan": result})
