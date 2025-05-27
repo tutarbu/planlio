@@ -37,7 +37,6 @@ def generate_plan():
         ],
         temperature=0.75
     )
-        )
         result = response.choices[0].message.content
         return jsonify({"plan": result})
 
