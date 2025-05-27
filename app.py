@@ -9,9 +9,10 @@ CORS(app, origins="*")  # tüm domainlerden erişime izin verir
 def home():
     return "OK", 200
 
-
+# OpenAI istemcisi
 client = openai.OpenAI(api_key="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")
 
+# Prompt şablonunu oku
 with open("kisisellestirilebilir_tatil_promptu.txt", "r", encoding="utf-8") as file:
     prompt_template = file.read()
 
@@ -19,7 +20,8 @@ with open("kisisellestirilebilir_tatil_promptu.txt", "r", encoding="utf-8") as f
 def generate_plan():
     data = request.get_json()
 
-    prompt_filled = prompt_template.replace("{{nereden}}", data.get("from", ""))
+    prompt_filled = prompt_template
+    prompt_filled = prompt_filled.replace("{{nereden}}", data.get("from", ""))
     prompt_filled = prompt_filled.replace("{{nereye}}", data.get("to", ""))
     prompt_filled = prompt_filled.replace("{{gidis_tarihi}}", data.get("checkin", ""))
     prompt_filled = prompt_filled.replace("{{donus_tarihi}}", data.get("checkout", ""))
@@ -29,14 +31,14 @@ def generate_plan():
     prompt_filled = prompt_filled.replace("{{butce}}", data.get("budget", "1000"))
 
     try:
-    response = client.chat.completions.create(
-        model="gpt-4.5-preview",
-        messages=[
-            {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
-            {"role": "user", "content": prompt_filled}
-        ],
-        temperature=0.75
-    )
+        response = client.chat.completions.create(
+            model="gpt-4.5-preview",
+            messages=[
+                {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
+                {"role": "user", "content": prompt_filled}
+            ],
+            temperature=0.75
+        )
         result = response.choices[0].message.content
         return jsonify({"plan": result})
 
