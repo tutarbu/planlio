@@ -199,7 +199,7 @@
       planText.textContent = "Plan hazırlanıyor...";
 
       try {
-        const response = await fetch("https://planlio.onrender.com/generate-plan", {
+        const response = await fetch("planlio.railway.internal/generate-plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
