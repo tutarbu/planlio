@@ -3,17 +3,18 @@ from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://planlio.info"}})
-
+CORS(app, resources={r"/*": {"origins": "*"}})  # Gerekirse sadece planlio.info yazabilirsin
 
 @app.route("/", methods=["GET", "HEAD"])
 def home():
     return "OK", 200
 
 # OpenAI istemcisi
-client = openai.OpenAI(api_key="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")
+client = openai.OpenAI(
+    api_key="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"
+)
 
-# Prompt şablonunu oku
+# Prompt şablonunu yükle
 with open("kisisellestirilebilir_tatil_promptu.txt", "r", encoding="utf-8") as file:
     prompt_template = file.read()
 
@@ -47,4 +48,4 @@ def generate_plan():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080)
