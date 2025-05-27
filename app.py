@@ -36,7 +36,6 @@ def generate_plan():
                 {"role": "user", "content": prompt_filled}
             ],
             temperature=0.75
-            max_tokens=2000
         )
         result = response.choices[0].message.content
         return jsonify({"plan": result})
