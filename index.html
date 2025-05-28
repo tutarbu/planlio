@@ -174,7 +174,23 @@
         height: 44px;
         font-size: 1rem;
       }
-    }
+    /* Masaüstünde mobil logoyu gizle */
+      .mobile-logo {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+      header {
+        display: none;
+      }
+
+      .mobile-logo {
+        display: block;
+        height: 72px;
+        margin-bottom: 1rem;
+      }
+}
+
   </style>
 </head>
 <body>
