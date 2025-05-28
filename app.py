@@ -8,7 +8,7 @@ CORS(app, origins=["https://planlio.info"], supports_credentials=True)
 
 # OpenAI istemcisi
 client = openai.OpenAI(
-    api_key="sk-proj-..."  # kendi geçerli API key'inle değiştir
+    api_key="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"  # kendi geçerli API key'inle değiştir
 )
 
 # prompt dosyasından gelen içerik (kısa örnekle burada tutuluyor)
