@@ -4,16 +4,17 @@ import openai
 import traceback
 
 app = Flask(__name__)
-CORS(app, origins=["https://planlio.info"])  # CORS ayarı sadece buradan verildi
+CORS(app, origins=["https://planlio.info"], supports_credentials=True)
 
 # OpenAI istemcisi
 client = openai.OpenAI(
-    api_key="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"
+    api_key="sk-proj-..."  # kendi geçerli API key'inle değiştir
 )
 
+# prompt dosyasından gelen içerik (kısa örnekle burada tutuluyor)
 prompt_template = """
-Sen profesyonel bir tatil rehberisin ve benim kişisel seyahat asistanım olarak çalışıyorsun...
-
+Sen profesyonel bir tatil rehberisin ve benim kişisel seyahat asistanım olarak çalışıyorsun. Görevin, kullanıcının verdiği bilgiler doğrultusunda tamamen kişiye özel, adım adım ilerleyen, detaylı ve rehber kitabı tadında bir seyahat planı hazırlamak. ...
+(
 Sen profesyonel bir tatil rehberisin ve benim kişisel seyahat asistanım olarak çalışıyorsun. Görevin, kullanıcının verdiği bilgiler doğrultusunda tamamen kişiye özel, adım adım ilerleyen, detaylı ve rehber kitabı tadında bir seyahat planı hazırlamak. Anlatım dili insani, akıcı ve her gün eşit özenle hazırlanmalı. Planın baştan sona kadar aynı samimi ve profesyonel üslupla yazılması zorunludur.
 
 🧳 KULLANICIDAN ALINAN BİLGİLER:
@@ -66,14 +67,22 @@ Sen profesyonel bir tatil rehberisin ve benim kişisel seyahat asistanım olarak
 - 1 yetişkin için Roma’da 4 günlük kültür gezisi, 2000 USD bütçeli kişisel plan
 
 Her yanıt %100 kişisel, anlatımı eşit özenli ve kullanıcıyı yönlendiren bir seyahat rehberi kitabı formatında yazılmalıdır.
+) 
+"""
 
-
-@app.route("/", methods=["GET", "HEAD"])
+@app.route("/", methods=["GET"])
 def home():
     return "OK", 200
 
-@app.route("/generate-plan", methods=["POST"])
+@app.route("/generate-plan", methods=["POST", "OPTIONS"])
 def generate_plan():
+    if request.method == "OPTIONS":
+        response = app.make_response('')
+        response.headers.add("Access-Control-Allow-Origin", "https://planlio.info")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return response, 204
+
     data = request.get_json()
 
     prompt_filled = prompt_template
@@ -88,13 +97,13 @@ def generate_plan():
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",  # 🔄 yeni model burada
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
                 {"role": "user", "content": prompt_filled}
             ],
             temperature=0.75,
-            timeout=30  # ⏱️ timeout eklenebilir
+            timeout=45
         )
         result = response.choices[0].message.content
         return jsonify({"plan": result})
