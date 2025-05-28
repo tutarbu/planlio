@@ -8,7 +8,7 @@ CORS(app, origins=["https://planlio.info"])  # CORS ayarı sadece buradan verild
 
 # OpenAI istemcisi
 client = openai.OpenAI(
-    api_key="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"
+    api_key="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"
 )
 
 prompt_template = """
