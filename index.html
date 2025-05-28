@@ -14,58 +14,44 @@
     }
 
     header {
-      width: 100%;
       padding: 1rem;
-      text-align: left;
     }
 
     header img {
       height: 64px;
-      max-width: 100%;
     }
 
-    .banner {
+    .container {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 64px);
       padding: 2rem 1rem;
       backdrop-filter: brightness(0.7);
     }
 
-    .banner-content {
-      display: flex;
-      flex-wrap: wrap;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      padding: 2rem;
-      max-width: 1000px;
-      width: 100%;
-      gap: 2rem;
-    }
-
-    .banner-text, .form-box {
+    .left-panel, .right-panel {
       flex: 1 1 300px;
-      min-width: 280px;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 1rem;
+      border-radius: 15px;
+      padding: 1.5rem;
     }
 
-    .banner-text h1 {
-      font-size: 2.4rem;
+    .left-panel h1 {
+      font-size: 2.2rem;
       margin-bottom: 1rem;
       text-align: center;
     }
 
-    .banner-text p {
+    .left-panel p {
       font-size: 1.1rem;
       text-align: center;
     }
 
-    .form-box {
-      background: rgba(255, 255, 255, 0.35);
-      padding: 1.5rem;
-      border-radius: 15px;
-      color: #003f6b;
-    }
-
-    .form-box h2 {
+    .right-panel h2 {
       margin-bottom: 1rem;
       font-size: 1.4rem;
       text-align: center;
@@ -86,6 +72,7 @@
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 0.95rem;
+      color: #003f6b;
     }
 
     button {
@@ -105,34 +92,13 @@
     }
 
     @media (max-width: 768px) {
-      .banner-content {
-        flex-direction: column;
-        padding: 1rem;
-        gap: 1.5rem;
-      }
-
-      .banner-text h1 {
-        font-size: 2rem;
-      }
-
-      .form-box {
-        padding: 1rem;
-      }
-
-      .form-row input {
-        font-size: 0.9rem;
-        height: 38px;
-      }
+      .left-panel h1 { font-size: 1.8rem; }
+      .form-row input { font-size: 0.9rem; height: 38px; }
     }
 
     @media (max-width: 480px) {
-      .form-row {
-        flex-direction: column;
-      }
-
-      .form-row input {
-        width: 100%;
-      }
+      .form-row { flex-direction: column; }
+      .form-row input { width: 100%; }
     }
   </style>
 </head>
@@ -141,31 +107,30 @@
     <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio">
   </header>
 
-  <div class="banner">
-    <div class="banner-content">
-      <div class="banner-text">
-        <h1>Hayalindeki Yolculuk Burada Başlar</h1>
-        <p>Planlio, Kişisel Gezi Planlayıcın</p>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Hayalindeki Yolculuk Burada Başlar</h1>
+      <p>Planlio, Kişisel Gezi Planlayıcın</p>
+    </div>
+
+    <div class="right-panel">
+      <h2>Plan Oluşturucu</h2>
+      <div class="form-row">
+        <input type="text" id="from" placeholder="Nereden (örn: İstanbul)">
+        <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
       </div>
-      <div class="form-box">
-        <h2>Plan Oluşturucu</h2>
-        <div class="form-row">
-          <input type="text" id="from" placeholder="Nereden (örn: İstanbul)">
-          <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
-        </div>
-        <div class="form-row">
-          <input type="date" id="checkin" class="date-picker">
-          <input type="date" id="checkout" class="date-picker">
-        </div>
-        <div class="form-row">
-          <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
-        </div>
-        <div class="form-row">
-          <input type="number" id="adults" min="1" placeholder="Yetişkin Sayısı">
-          <input type="number" id="children" min="0" placeholder="Çocuk Sayısı">
-        </div>
-        <button onclick="openPlanPage()">Planla</button>
+      <div class="form-row">
+        <input type="date" id="checkin" class="date-picker">
+        <input type="date" id="checkout" class="date-picker">
       </div>
+      <div class="form-row">
+        <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
+      </div>
+      <div class="form-row">
+        <input type="number" id="adults" min="1" placeholder="Yetişkin Sayısı">
+        <input type="number" id="children" min="0" placeholder="Çocuk Sayısı">
+      </div>
+      <button onclick="openPlanPage()">Planla</button>
     </div>
   </div>
 
