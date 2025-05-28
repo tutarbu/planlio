@@ -7,25 +7,21 @@ import traceback
 app = Flask(__name__)
 CORS(app, origins=["https://planlio.info"], supports_credentials=True)
 
+# Gemini 2.0 Flash model endpoint (v1beta!)
 GEMINI_API_KEY = os.environ.get("AIzaSyD6XWUjxQ9chZrmI0G7DhwGMSrVEgpCd-s")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-latest:generateContent?key={GEMINI_API_KEY}"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD6XWUjxQ9chZrmI0G7DhwGMSrVEgpCd-s"
 
-# Prompt şablonu (kısa, güçlü)
+# Basitleştirilmiş ve hızlı prompt
 prompt_template = """
-Sen deneyimli bir tatil danışmanısın. Kullanıcıdan alınan bilgilerle kişiye özel bir seyahat planı oluştur.
+Sen bir seyahat danışmanısın. Aşağıdaki bilgilerle kişisel bir tatil planı hazırla:
 
-Plan; gün gün sabah, öğle, akşam bölümlerinden oluşsun. Her bölümde gidilecek yer, yapılacak aktivite, kısa açıklama ve yerel tavsiyeler ver.
-
-Anlatım doğal, rehber diliyle yazılsın. Komut verici değil, açıklayıcı ve akıcı olsun.
-
-Plan sonunda toplam maliyet özeti yer alsın. Bütçeye uygunluk, ulaşım, yemek, kültürel bilgiler ve yerel öneriler de dahil edilsin.
-
-Bilgiler:
 - Nereden: {{nereden}}
 - Nereye: {{nereye}}
 - Gidiş: {{gidis_tarihi}} – Dönüş: {{donus_tarihi}}
 - Yetişkin: {{yetiskin_sayisi}} – Çocuk: {{cocuk_sayisi}}
 - Amaç: {{seyahat_amaci}} – Bütçe: {{butce}} USD
+
+Her gün sabah, öğle, akşam bölümlerine ayrılmış, öneri içeren sade bir plan yaz.
 """
 
 @app.route("/", methods=["GET"])
@@ -43,7 +39,7 @@ def generate_plan():
 
     try:
         data = request.get_json()
-        print("👉 Alınan form verisi:", data)
+        print("👉 Alınan veri:", data)
 
         prompt = prompt_template
         prompt = prompt.replace("{{nereden}}", data.get("from", ""))
@@ -55,12 +51,9 @@ def generate_plan():
         prompt = prompt.replace("{{seyahat_amaci}}", data.get("interests", "tatil"))
         prompt = prompt.replace("{{butce}}", data.get("budget", "1000"))
 
-        print("🧠 Oluşan prompt:", prompt[:500], "...")
+        print("📤 Prompt:", prompt[:300], "...")
 
-        headers = {
-            "Content-Type": "application/json"
-        }
-
+        headers = {"Content-Type": "application/json"}
         payload = {
             "contents": [
                 {
@@ -71,18 +64,16 @@ def generate_plan():
             ]
         }
 
-        print("📤 Gönderilen payload:", payload)
-
         response = requests.post(GEMINI_URL, headers=headers, json=payload)
         result = response.json()
 
-        print("📥 Gemini yanıtı:", result)
+        print("📥 Gemini cevabı:", result)
 
         if "candidates" in result:
             content = result["candidates"][0]["content"]["parts"][0]["text"]
             return jsonify({"plan": content})
         else:
-            return jsonify({"error": result.get("error", "Gemini cevabı alınamadı.")}), 500
+            return jsonify({"error": result.get("error", "Yanıt alınamadı.")}), 500
 
     except Exception as e:
         print("❌ HATA:", e)
