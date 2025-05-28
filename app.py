@@ -3,7 +3,7 @@ from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
-CORS(app)  # Tüm domainlere izin verir (gerekirse origins=["https://planlio.info"] olarak kısıtlayabilirsin)
+CORS(app, supports_credentials=True)
 
 @app.route("/", methods=["GET", "HEAD"])
 def home():
