@@ -108,9 +108,19 @@
       background-color: #004f88;
     }
 
+    .mobile-logo {
+      display: none;
+    }
+
     @media (max-width: 768px) {
       header {
         display: none;
+      }
+
+      .mobile-logo {
+        display: block;
+        height: 72px;
+        margin-bottom: 1rem;
       }
 
       .banner {
@@ -127,11 +137,6 @@
       .banner-text {
         padding: 0;
         text-align: center;
-      }
-
-      .banner-text img {
-        height: 72px;
-        margin-bottom: 1rem;
       }
 
       .banner-text h1 {
@@ -174,28 +179,12 @@
         height: 44px;
         font-size: 1rem;
       }
-    /* Masaüstünde mobil logoyu gizle */
-      .mobile-logo {
-        display: none;
-      }
-
-      @media (max-width: 768px) {
-      header {
-        display: none;
-      }
-
-      .mobile-logo {
-        display: block;
-        height: 72px;
-        margin-bottom: 1rem;
-      }
-}
-
+    }
   </style>
 </head>
 <body>
 
-  <!-- LOGO (web) -->
+  <!-- LOGO (masaüstü) -->
   <header>
     <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio">
   </header>
@@ -203,7 +192,7 @@
   <div class="banner">
     <div class="banner-content">
       <div class="banner-text">
-        <!-- LOGO (mobil) -->
+        <!-- LOGO (mobilde görünür) -->
         <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio" class="mobile-logo" />
         <h1>Hayalindeki Yolculuk Burada Başlar</h1>
         <p>Planlio, Kişisel Gezi Planlayıcın</p>
