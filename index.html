@@ -69,6 +69,7 @@
       margin-bottom: 1rem;
       font-size: 1.5rem;
       color: #003f6b;
+      text-align: center;
     }
 
     .form-row {
@@ -85,8 +86,9 @@
     }
 
     .form-label {
-      font-size: 0.85rem;
-      margin-bottom: 0.2rem;
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
       color: #003f6b;
     }
 
@@ -106,22 +108,9 @@
       background-color: #004f88;
     }
 
-    /* >>>>>> MOBİL DÜZENLEMELER <<<<<< */
     @media (max-width: 768px) {
       header {
-        position: relative;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(6px);
-        border-radius: 12px;
-        margin: 1rem auto 0 auto;
-        text-align: center;
-        padding: 0.5rem 1rem;
-        width: fit-content;
-        height: auto;
-      }
-
-      header img {
-        height: 64px;
+        display: none;
       }
 
       .banner {
@@ -138,6 +127,11 @@
       .banner-text {
         padding: 0;
         text-align: center;
+      }
+
+      .banner-text img {
+        height: 72px;
+        margin-bottom: 1rem;
       }
 
       .banner-text h1 {
@@ -166,10 +160,6 @@
         flex-direction: row;
       }
 
-      .form-label {
-        margin-left: 0.25rem;
-      }
-
       .form-row input {
         height: 40px;
         font-size: 0.95rem;
@@ -188,6 +178,8 @@
   </style>
 </head>
 <body>
+
+  <!-- LOGO (web) -->
   <header>
     <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio">
   </header>
@@ -195,15 +187,20 @@
   <div class="banner">
     <div class="banner-content">
       <div class="banner-text">
+        <!-- LOGO (mobil) -->
+        <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio" class="mobile-logo" />
         <h1>Hayalindeki Yolculuk Burada Başlar</h1>
         <p>Planlio, Kişisel Gezi Planlayıcın</p>
       </div>
+
       <div class="form-box">
         <h2>Plan Oluşturucu</h2>
+
         <div class="form-row">
           <input type="text" id="from" placeholder="Nereden (örn: İstanbul)">
           <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
         </div>
+
         <div class="form-row date-row">
           <div style="flex: 1;">
             <label class="form-label" for="checkin">Gidiş Tarihi</label>
@@ -214,13 +211,16 @@
             <input type="date" id="checkout" class="date-picker">
           </div>
         </div>
+
         <div class="form-row">
           <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
         </div>
+
         <div class="form-row">
           <input type="number" id="adults" min="1" placeholder="Yetişkin Sayısı">
           <input type="number" id="children" min="0" placeholder="Çocuk Sayısı">
         </div>
+
         <button onclick="openPlanPage()">Planla</button>
       </div>
     </div>
