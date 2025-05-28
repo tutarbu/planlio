@@ -13,9 +13,8 @@
       color: white;
     }
     header {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
+      position: relative;
+      padding: 1rem;
       z-index: 10;
     }
     header img {
@@ -26,7 +25,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       padding: 1rem;
       backdrop-filter: brightness(0.7);
     }
@@ -36,7 +35,7 @@
       background-color: rgba(255, 255, 255, 0);
       border-radius: 15px;
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1200px;
       width: 100%;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0);
       gap: 2rem;
@@ -49,17 +48,17 @@
       padding-right: 2rem;
     }
     .banner-text h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
       text-align: center;
     }
     .banner-text p {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       text-align: center;
     }
     .form-box {
       background: rgba(255, 255, 255, 0.342);
-      padding: 1.5rem;
+      padding: 2rem;
       border-radius: 15px;
       color: #003f6b;
     }
@@ -80,7 +79,9 @@
       padding: 0.5rem;
       border-radius: 5px;
       border: 1px solid #ccc;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      max-width: 100%;
+      height: 44px;
     }
     button {
       margin-top: 1rem;
@@ -106,6 +107,19 @@
       .banner-text {
         padding-right: 0;
       }
+      .banner-text h1 {
+        font-size: 2rem;
+      }
+      .banner-text p {
+        font-size: 1rem;
+      }
+      .form-box {
+        padding: 1.2rem;
+      }
+      .form-row input {
+        font-size: 0.9rem;
+        height: 40px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -114,9 +128,6 @@
       }
       .form-row input {
         width: 100%;
-      }
-      .form-box {
-        padding: 1rem;
       }
     }
   </style>
@@ -139,8 +150,8 @@
           <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
         </div>
         <div class="form-row">
-          <input type="date" id="checkin" class="date-picker" placeholder="Giriş Tarihi">
-          <input type="date" id="checkout" class="date-picker" placeholder="Çıkış Tarihi">
+          <input type="date" id="checkin" class="date-picker">
+          <input type="date" id="checkout" class="date-picker">
         </div>
         <div class="form-row">
           <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
@@ -191,6 +202,5 @@
       });
     });
   </script>
-
 </body>
 </html>
