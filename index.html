@@ -46,7 +46,6 @@
     .banner-text {
       flex: 1;
       padding-right: 2rem;
-      backdrop-filter: none;
     }
 
     .banner-text h1 {
@@ -63,7 +62,6 @@
       background: rgba(255, 255, 255, 0.342);
       padding: 2rem;
       border-radius: 15px;
-      backdrop-filter: none;
       color: #003f6b;
     }
 
@@ -86,6 +84,12 @@
       border: 1px solid #ccc;
     }
 
+    .form-label {
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
+      color: #003f6b;
+    }
+
     button {
       margin-top: 1rem;
       width: 100%;
@@ -105,13 +109,19 @@
     /* >>>>>> MOBİL DÜZENLEMELER <<<<<< */
     @media (max-width: 768px) {
       header {
-        position: static;
+        position: relative;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(6px);
+        border-radius: 12px;
+        margin: 1rem auto 0 auto;
         text-align: center;
-        margin-bottom: 1rem;
+        padding: 0.5rem 1rem;
+        width: fit-content;
+        height: auto;
       }
 
       header img {
-        height: 96px;
+        height: 64px;
       }
 
       .banner {
@@ -143,7 +153,7 @@
       }
 
       .form-box h2 {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         text-align: center;
       }
 
@@ -152,9 +162,21 @@
         gap: 0.75rem;
       }
 
+      .form-row.date-row {
+        flex-direction: row;
+      }
+
+      .form-label {
+        margin-left: 0.25rem;
+      }
+
       .form-row input {
         height: 40px;
         font-size: 0.95rem;
+        width: 100%;
+      }
+
+      .form-row.date-row input {
         width: 100%;
       }
 
@@ -182,9 +204,15 @@
           <input type="text" id="from" placeholder="Nereden (örn: İstanbul)">
           <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
         </div>
-        <div class="form-row">
-          <input type="date" id="checkin" class="date-picker">
-          <input type="date" id="checkout" class="date-picker">
+        <div class="form-row date-row">
+          <div style="flex: 1;">
+            <label class="form-label" for="checkin">Gidiş Tarihi</label>
+            <input type="date" id="checkin" class="date-picker">
+          </div>
+          <div style="flex: 1;">
+            <label class="form-label" for="checkout">Dönüş Tarihi</label>
+            <input type="date" id="checkout" class="date-picker">
+          </div>
         </div>
         <div class="form-row">
           <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
