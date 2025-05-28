@@ -19,42 +19,46 @@
       z-index: 10;
     }
     header img {
-      height: 164px;
+      height: 100px;
+      max-width: 100%;
     }
     .banner {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      padding: 1rem;
       backdrop-filter: brightness(0.7);
     }
     .banner-content {
       display: flex;
+      flex-wrap: wrap;
       background-color: rgba(255, 255, 255, 0);
       border-radius: 15px;
       padding: 2rem;
       max-width: 1200px;
-      width: 90%;
+      width: 100%;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0);
+      gap: 2rem;
+    }
+    .banner-text, .form-box {
+      flex: 1 1 300px;
+      min-width: 280px;
     }
     .banner-text {
-      flex: 1;
       padding-right: 2rem;
-      backdrop-filter: none;
     }
     .banner-text h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
     }
     .banner-text p {
       font-size: 1.2rem;
     }
     .form-box {
-      flex: 1;
       background: rgba(255, 255, 255, 0.342);
       padding: 2rem;
       border-radius: 15px;
-      backdrop-filter: none;
       color: #003f6b;
     }
     .form-box h2 {
@@ -64,11 +68,12 @@
     }
     .form-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
       margin-bottom: 1rem;
     }
     .form-row input {
-      flex: 1;
+      flex: 1 1 130px;
       padding: 0.5rem;
       border-radius: 5px;
       border: 1px solid #ccc;
@@ -86,6 +91,35 @@
     }
     button:hover {
       background-color: #004f88;
+    }
+
+    @media (max-width: 768px) {
+      .banner-text {
+        padding-right: 0;
+      }
+      .banner-text h1 {
+        font-size: 2rem;
+        text-align: center;
+      }
+      .banner-text p {
+        text-align: center;
+      }
+      .banner-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        flex-direction: column;
+      }
+      .form-row input {
+        width: 100%;
+      }
+      .form-box {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
@@ -107,11 +141,8 @@
           <input type="text" id="to" placeholder="Nereye (örn: Antalya)">
         </div>
         <div class="form-row">
-
-         
           <input type="date" id="checkin" class="date-picker" placeholder="Giriş Tarihi">
           <input type="date" id="checkout" class="date-picker" placeholder="Çıkış Tarihi">
-
         </div>
         <div class="form-row">
           <input type="number" id="budget" min="0" placeholder="Tahmini Bütçe (USD)">
@@ -161,7 +192,7 @@
       this.showPicker && this.showPicker();
     });
   });
-</script>
+  </script>
 
 </body>
 </html>
