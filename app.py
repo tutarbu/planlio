@@ -5,6 +5,13 @@ import openai
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'https://planlio.info')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 @app.route("/", methods=["GET", "HEAD"])
 def home():
     return "OK", 200
@@ -45,7 +52,7 @@ def generate_plan():
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4.5-preview",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
                 {"role": "user", "content": prompt_filled}
