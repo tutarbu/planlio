@@ -95,7 +95,7 @@ def generate_plan():
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-0125",
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "Sen profesyonel bir tatil planlama asistanısın."},
                 {"role": "user", "content": prompt_filled}
