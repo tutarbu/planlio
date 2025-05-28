@@ -11,22 +11,22 @@
       background: #f0f4f8;
     }
     header {
-  background-color: #6ccbf7;
-  height: 60px; /* sabit yükseklik */
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-}
-
+      background-color: #6ccbf7;
+      padding: 0 1rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      flex-wrap: wrap;
+    }
     .header-left {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
     .header-left img {
-      height: 128px;
+      height: 48px;
     }
     .logo {
       font-size: 1.5rem;
@@ -34,39 +34,47 @@
     }
     .nav {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
     .nav a {
       text-decoration: none;
       color: white;
       font-weight: bold;
+      font-size: 0.95rem;
     }
     .container {
       display: flex;
-      height: calc(100vh - 70px);
+      flex-wrap: wrap;
+      min-height: calc(100vh - 60px);
     }
     .left-panel {
-      width: 40%;
+      width: 100%;
+      max-width: 500px;
       background: #ffffff;
-      padding: 2rem;
-      overflow-y: auto;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      flex: 1;
     }
     .left-panel h2 {
       margin-bottom: 1rem;
       color: #003f6b;
+      font-size: 1.4rem;
+      text-align: center;
     }
     .form-row {
       display: flex;
-      gap: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
       margin-bottom: 1rem;
     }
     .form-row input {
-      flex: 1;
+      flex: 1 1 120px;
       padding: 0.5rem;
       border-radius: 5px;
       border: 1px solid #7cc0f8;
       color: #003f6b;
+      font-size: 0.95rem;
     }
     button {
       margin-top: 1rem;
@@ -88,24 +96,32 @@
     .plan-output h3 {
       margin-bottom: 1rem;
       color: #003f6b;
+      text-align: center;
     }
     .right-panel {
       flex: 1;
-      position: relative;
-    }
-    #map {
-      height: 100%;
+      min-height: 300px;
       width: 100%;
     }
-    .map-overlay {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: rgba(255, 255, 255, 0);
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-      font-size: 0.9rem;
+    #map {
+      height: 300px;
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .container {
+        flex-wrap: nowrap;
+      }
+      .left-panel {
+        width: 40%;
+        max-width: none;
+        height: auto;
+      }
+      .right-panel {
+        height: auto;
+      }
+      #map {
+        height: 100%;
+      }
     }
   </style>
 </head>
@@ -113,7 +129,6 @@
   <header>
     <div class="header-left">
       <img src="https://i.ibb.co/7tzZR0jn/logo.png" alt="Planlio">
-    
     </div>
     <nav class="nav">
       <a href="https://www.skyscanner.com" target="_blank">Transport</a>
@@ -149,7 +164,6 @@
 
     <div class="right-panel">
       <div id="map"></div>
-      <div class="map-overlay"></div>
     </div>
   </div>
 
@@ -164,7 +178,6 @@
       });
       initMap();
       generatePlan();
-
       document.getElementById("checkin").addEventListener("change", updateCheckoutLimit);
       initAutocomplete();
     };
@@ -172,11 +185,9 @@
     function updateCheckoutLimit() {
       const checkin = document.getElementById("checkin").value;
       if (!checkin) return;
-
       const minDate = new Date(checkin);
       const maxDate = new Date(checkin);
       maxDate.setDate(minDate.getDate() + 6);
-
       const formatDate = (d) => d.toISOString().split("T")[0];
       document.getElementById("checkout").min = formatDate(minDate);
       document.getElementById("checkout").max = formatDate(maxDate);
@@ -254,12 +265,10 @@
     }
 
     function initAutocomplete() {
-      const options = {
-        types: ["(cities)"],
-        componentRestrictions: { country: "tr" }
-      };
-      new google.maps.places.Autocomplete(document.getElementById("from"), options);
-      new google.maps.places.Autocomplete(document.getElementById("to"), options);
+      const fromInput = document.getElementById('from');
+      const toInput = document.getElementById('to');
+      new google.maps.places.Autocomplete(fromInput, { types: ['(cities)'] });
+      new google.maps.places.Autocomplete(toInput, { types: ['(cities)'] });
     }
   </script>
 
