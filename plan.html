@@ -159,6 +159,10 @@
 
       <div class="plan-output" id="plan-output">
         <h3>Önerilen Plan</h3>
+
+        <!-- Travelpayouts Uçuş Widget -->
+        <div id="flight-widget" style="margin-top: 1.5rem;"></div>
+
         <p id="plan-text">Plan hazırlanıyor...</p>
       </div>
     </div>
@@ -209,6 +213,16 @@
 
       const planText = document.getElementById("plan-text");
       planText.textContent = "Plan hazırlanıyor...";
+
+      // Travelpayouts scripti dinamik yerleştir
+      const fw = document.getElementById("flight-widget");
+      fw.innerHTML = "";
+      const script = document.createElement("script");
+      script.async = true;
+      script.charset = "utf-8";
+      const origin = encodeURIComponent(data.from || "Istanbul");
+      script.src = `https://tpemd.com/content?trs=421366&shmarker=635862.635862&locale=tr&curr=TRY&default_origin=${origin}&powered_by=true&border_radius=15&plain=false&color_button=%232681ff&color_button_text=%23ffffff&color_border=%232681ff&promo_id=4132&campaign_id=121`;
+      fw.appendChild(script);
 
       try {
         const response = await fetch("https://planlio-production.up.railway.app/generate-plan", {
@@ -268,7 +282,7 @@
     function initAutocomplete() {
       const options = {
         types: ["(cities)"],
-        componentRestrictions: { country: "tr" }
+        componentRestrictions: { country: "all" }
       };
       new google.maps.places.Autocomplete(document.getElementById("from"), options);
       new google.maps.places.Autocomplete(document.getElementById("to"), options);
