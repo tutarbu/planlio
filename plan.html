@@ -219,7 +219,9 @@
 
         const result = await response.json();
         if (result.plan) {
-          planText.innerHTML = result.plan.replace(/\n/g, "<br>");
+          const tripLinkHTML = '✈️🏨 Otel ve uçak rezervasyonlarınızı <a href="https://trip.tp.st/ylMdsQmX" target="_blank"><strong>Trip.com</strong></a> üzerinden kolayca yapabilirsiniz.<br><br>';
+          planText.innerHTML = tripLinkHTML + result.plan.replace(/\n/g, "<br>");
+
           findPlaces(data.to);
         } else {
           planText.textContent = "Plan alınamadı: " + (result.error || "Bilinmeyen hata.");
