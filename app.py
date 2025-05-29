@@ -22,6 +22,7 @@ Sen bir seyahat danışmanısın. Aşağıdaki bilgilerle kişisel bir tatil pla
 - Amaç: {{seyahat_amaci}} – Bütçe: {{butce}} USD
 
 Her gün sabah, öğle, akşam bölümlerine ayrılmış, öneri içeren sade bir plan yaz.
+"Kullanıcının seyahat edeceği şehir için otel ve uçuş rezervasyonu yapması gerekiyorsa, Trip.com'a yönlendiren şu bağlantıyı öner: https://trip.tp.st/ylMdsQmX. 'Trip.com üzerinden rezervasyon yap' gibi sade bir cümle ile geçir."
 """
 
 @app.route("/", methods=["GET"])
