@@ -22,12 +22,6 @@ Sen bir seyahat danışmanısın. Aşağıdaki bilgilerle kişisel bir tatil pla
 - Amaç: {{seyahat_amaci}} – Bütçe: {{butce}} USD
 
 Her gün sabah, öğle, akşam bölümlerine ayrılmış, öneri içeren sade bir plan yaz.
-Kullanıcının seyahat planı açıklamasına başlamadan önce, otel ve uçak rezervasyonu yapması gerektiğini hatırlat.
-“Otel ve uçak rezervasyonlarınızı Trip.com üzerinden kolayca yapabilirsiniz.”
-
-Bu cümleyi plan metninin en başında, girizgâhtan hemen önce göster.
-Linkin metin içeriği Trip.com olsun ama kullanıcıyı https://trip.tp.st/ylMdsQmX adresine yönlendirsin.
-Bu ifade tek başına, dikkat çekici bir satır olarak görünmeli.
 """
 
 @app.route("/", methods=["GET"])
